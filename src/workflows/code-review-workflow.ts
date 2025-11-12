@@ -60,7 +60,7 @@ export function createCodeReviewWorkflow() {
             }
           }
         }
-
+        console.log(`Fetched ${files.length} changed files.`);
         return { files };
       },
     })
@@ -74,7 +74,7 @@ export function createCodeReviewWorkflow() {
         const files = previousStep?.files || [];
 
         const result = await reviewCodeStandards(files, openaiApiKey);
-
+        console.log('Code standards review result:', result);
         return { codeStandardsResult: result };
       },
     })
@@ -87,7 +87,7 @@ export function createCodeReviewWorkflow() {
         const files = previousStep?.files || [];
 
         const result = await reviewSecurity(files, openaiApiKey);
-
+        console.log('Security review result:', result);
         return { securityResult: result };
       },
     })
@@ -101,7 +101,7 @@ export function createCodeReviewWorkflow() {
         const files = previousStep?.files || [];
 
         const result = await reviewPerformance(files, openaiApiKey);
-
+        console.log('Performance review result:', result);
         return { performanceResult: result };
       },
     })
@@ -149,7 +149,7 @@ export function createCodeReviewWorkflow() {
           results: results as ReviewResult[],
           summary,
         };
-
+        console.log('Aggregated report:', report);
         return { report };
       },
     })
@@ -206,7 +206,7 @@ export function createCodeReviewWorkflow() {
           statusState as 'success' | 'failure',
           `Code Review: ${report.overallStatus} (Score: ${report.overallScore}/100)`
         );
-
+        console.log('Posted results to GitHub.');
         return { success: true, report };
       },
     })
