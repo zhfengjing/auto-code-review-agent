@@ -1,0 +1,12 @@
+name = "auto-code-review-agent"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+
+# 需要在 Cloudflare Dashboard 中设置这些 secrets:
+# wrangler secret put OPENAI_API_KEY
+# wrangler secret put GITHUB_TOKEN
+# wrangler secret put WEBHOOK_SECRET

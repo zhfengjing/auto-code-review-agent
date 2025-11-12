@@ -1,0 +1,40 @@
+{
+  "name": "auto-code-review-agent",
+  "version": "1.0.0",
+  "description": "Automatic code review system using Mastra AI agents",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "tsc",
+    "lint": "eslint src",
+    "test": "vitest",
+    "tail":"wrangler tail"
+  },
+  "keywords": [
+    "code-review",
+    "mastra",
+    "graphql",
+    "openai",
+    "cloudflare-workers"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@ai-sdk/openai": "^2.0.64",
+    "@mastra/core": "^0.24.0",
+    "@octokit/rest": "^20.0.2",
+    "graphql": "^16.8.1",
+    "graphql-yoga": "^5.1.1",
+    "hono": "^4.0.0",
+    "openai": "^4.28.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240129.0",
+    "@types/node": "^20.11.17",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2",
+    "wrangler": "^3.28.2"
+  }
+}
