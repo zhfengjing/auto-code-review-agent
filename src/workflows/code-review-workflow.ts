@@ -44,7 +44,7 @@ export function createCodeReviewWorkflow() {
         } else {
           files = await githubTool.getCommitFiles(owner, repo, commitSha);
         }
-
+        console.log(`Fetched ${files.length} changed files metadata.`,files);
         // 获取文件内容
         for (const file of files) {
           if (file.status !== 'removed') {
@@ -68,11 +68,11 @@ export function createCodeReviewWorkflow() {
     .step({
       id: 'code-standards-review',
       execute: async ({ context, machineContext }) => {
-        console.log('Executing code-standards-review step...',context);
+        console.log('Executing code-standards-review step...',context,machineContext);
         const { openaiApiKey } = context.triggerData;
         const previousStep = machineContext?.getStepPayload('fetch-files');
+        console.log('Previous step payload:', previousStep);
         const files = previousStep?.files || [];
-
         const result = await reviewCodeStandards(files, openaiApiKey);
         console.log('Code standards review result:', result);
         return { codeStandardsResult: result };
@@ -119,7 +119,11 @@ export function createCodeReviewWorkflow() {
         const codeStandardsResult = codeStandardsStep?.codeStandardsResult;
         const securityResult = securityStep?.securityResult;
         const performanceResult = performanceStep?.performanceResult;
-
+        console.log('Individual results:', {
+          codeStandardsResult,
+          securityResult,
+          performanceResult,
+        });
         const results = [codeStandardsResult, securityResult, performanceResult].filter(Boolean);
 
         // 计算总体得分
@@ -158,22 +162,23 @@ export function createCodeReviewWorkflow() {
       id: 'post-results',
       execute: async ({ context, machineContext }) => {
         console.log('Fpost-results...',context);
+        console.log('Fpost-results...machineContext:',machineContext);
 
         const { owner, repo, pullNumber, commitSha, githubToken } = context.triggerData;
         const aggregateStep = machineContext?.getStepPayload('aggregate-results');
         const report = aggregateStep?.report;
-
+        console.log('Report to post:', aggregateStep,report);
         if (!report) {
           throw new Error('No report generated');
         }
 
         const githubTool = new GitHubTool(githubToken);
         const markdown = formatReviewMarkdown(report);
-
+        console.log('Formatted markdown report.',markdown);
         // 如果是 PR，发布评论和审核
         if (pullNumber) {
           await githubTool.createPRComment(owner, repo, pullNumber, markdown);
-
+          console.log('Posted PR comment.');
           // 根据结果创建审核
           const reviewEvent =
             report.overallStatus === 'passed'

@@ -66,14 +66,14 @@ app.post('/webhook/github', async (c) => {
     const event: GitHubWebhookEvent = JSON.parse(payload);
     const eventType = c.req.header('X-GitHub-Event');
 
-    console.log(`Received GitHub webhook: ${eventType}`);
+    console.log(`Received GitHub webhook: ${eventType}`,'payload:',payload);
 
     if (!['push', 'pull_request'].includes(eventType || '')) {
       return c.json({ message: 'Event not supported' }, 200);
     }
 
     const result = await handleGitHubWebhook(event, env);
-
+    console.log('Webhook handled with result:', result);
     if (result.success) {
       return c.json({ message: result.message }, 200);
     } else {
