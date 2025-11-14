@@ -17,7 +17,7 @@ export function createCodeStandardsAgent(openaiApiKey: string): Agent {
 6. Ensure adherence to language-specific best practices`,
     model: {
       provider: 'OPEN_AI',
-      name: 'gpt-3.5-turbo',
+      name: 'gpt-4.1',
       toolChoice: 'auto',
     },
   });

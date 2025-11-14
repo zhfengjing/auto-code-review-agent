@@ -18,7 +18,7 @@ export function createSecurityAgent(openaiApiKey: string): Agent {
 7. Verify secure data handling and storage`,
     model: {
       provider: 'OPEN_AI',
-      name: 'gpt-4o-mini',
+      name: 'gpt-4.1',
       toolChoice: 'auto',
     },
   });
