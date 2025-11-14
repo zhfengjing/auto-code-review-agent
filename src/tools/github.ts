@@ -24,7 +24,7 @@ export class GitHubTool {
       repo,
       pull_number: pullNumber,
     });
-    console.log('getPRFiles data:', data);
+    // console.log('getPRFiles data:', data);
     return data.map((file) => ({
       filename: file.filename,
       status: file.status as 'added' | 'modified' | 'removed',
@@ -50,7 +50,7 @@ export class GitHubTool {
         path,
         ref,
       });
-      console.log('getFileContent data:', data);
+      // console.log('getFileContent data:', data);
       if ('content' in data && data.content) {
         return Buffer.from(data.content, 'base64').toString('utf-8');
       }

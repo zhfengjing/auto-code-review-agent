@@ -27,7 +27,7 @@ export async function handleGitHubWebhook(
     // 处理 Pull Request 事件
     if (event.pull_request) {
       const { repository, pull_request } = event;
-
+      console.log('Handling PR event...');
       if (!['opened', 'synchronize', 'reopened'].includes(event.action)) {
         return {
           success: true,
@@ -39,11 +39,18 @@ export async function handleGitHubWebhook(
         `Reviewing PR #${pull_request.number} in ${repository.full_name}`
       );
 
-      const workflow = mastra.legacy_getWorkflow('codeReview');
-      console.log('Executing code review workflow...',workflow);
-      const run = workflow.createRun();
+      const workflow = mastra.getWorkflow('codeReview');
+      console.log('Executing code review workflow...', workflow);
+      const run = await workflow.createRunAsync();
+      // run.watch((event) => {
+      //   const {
+      //     payload: { currentStep },
+      //   } = event;
+
+      //   console.log('run watch',event,'-----',currentStep?.payload?.status);
+      // });
       await run.start({
-        triggerData: {
+        inputData: {
           owner: repository.owner.login,
           repo: repository.name,
           pullNumber: pull_request.number,
@@ -77,10 +84,10 @@ export async function handleGitHubWebhook(
         `Reviewing commit ${after} on ${branch} in ${repository.full_name}`
       );
 
-      const workflow = mastra.legacy_getWorkflow('codeReview');
-      const run = workflow.createRun();
+      const workflow = mastra.getWorkflow('codeReview');
+      const run = await workflow.createRunAsync();
       await run.start({
-        triggerData: {
+        inputData: {
           owner: repository.owner.login,
           repo: repository.name,
           commitSha: after,

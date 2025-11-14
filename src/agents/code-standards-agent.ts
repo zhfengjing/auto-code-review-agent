@@ -17,7 +17,7 @@ export function createCodeStandardsAgent(openaiApiKey: string): Agent {
 6. Ensure adherence to language-specific best practices`,
     model: {
       provider: 'OPEN_AI',
-      name: 'gpt-4-turbo-preview',
+      name: 'gpt-3.5-turbo',
       toolChoice: 'auto',
     },
   });
@@ -69,7 +69,7 @@ Return your analysis in JSON format with this structure:
         fileContent,
         {}
       );
-
+      console.log(`Analysis result for ${file.filename}:`);
       if (result.issues && Array.isArray(result.issues)) {
         for (const issue of result.issues) {
           issues.push({
