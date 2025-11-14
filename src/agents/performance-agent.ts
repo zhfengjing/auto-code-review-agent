@@ -18,7 +18,7 @@ export function createPerformanceAgent(openaiApiKey: string): Agent {
 7. Identify blocking operations`,
     model: {
       provider: 'OPEN_AI',
-      name: 'gpt-3.5-turbo',
+      name: 'gpt-4o-mini',
       toolChoice: 'auto',
     },
   });
