@@ -12,7 +12,7 @@ export function createMastraInstance(env: Env): Mastra {
 
   const mastra = new Mastra({
     agents: agents,
-    legacy_workflows: {
+    workflows: {
       codeReview: createCodeReviewWorkflow(),
     },
     telemetry: {

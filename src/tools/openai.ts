@@ -30,7 +30,8 @@ export class OpenAITool {
     ];
 
     const completion = await this.client.chat.completions.create({
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-3.5-turbo',
+      // model: 'gpt-4-turbo-preview',
       messages,
       temperature: 0.3,
       max_tokens: 2000,
@@ -57,16 +58,17 @@ export class OpenAITool {
         content: `Code to analyze:\n\n${codeContent}\n\nPlease respond in JSON format.`,
       },
     ];
-
+    // console.log('analyzeCodeStructured this.client:', this.client.baseURL);
     const completion = await this.client.chat.completions.create({
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-3.5-turbo',
       messages,
       temperature: 0.3,
       max_tokens: 2000,
       response_format: { type: 'json_object' },
     });
-
+    // console.log('analyzeCodeStructured completion:', completion);
     const content = completion.choices[0]?.message?.content || '{}';
+    // console.log('analyzeCodeStructured content:', content);
     return JSON.parse(content);
   }
 

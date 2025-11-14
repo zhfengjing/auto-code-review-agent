@@ -24,7 +24,7 @@ export class GitHubTool {
       repo,
       pull_number: pullNumber,
     });
-
+    // console.log('getPRFiles data:', data);
     return data.map((file) => ({
       filename: file.filename,
       status: file.status as 'added' | 'modified' | 'removed',
@@ -50,7 +50,7 @@ export class GitHubTool {
         path,
         ref,
       });
-
+      // console.log('getFileContent data:', data);
       if ('content' in data && data.content) {
         return Buffer.from(data.content, 'base64').toString('utf-8');
       }
@@ -70,6 +70,9 @@ export class GitHubTool {
     pullNumber: number,
     body: string
   ): Promise<void> {
+    console.log('Creating PR comment with body:', body);
+    console.log('Owner:', owner, 'Repo:', repo, 'Pull Number:', pullNumber);
+    console.log('Octokit instance:', this.octokit);
     await this.octokit.issues.createComment({
       owner,
       repo,
@@ -88,6 +91,7 @@ export class GitHubTool {
     event: 'APPROVE' | 'REQUEST_CHANGES' | 'COMMENT',
     body: string
   ): Promise<void> {
+    console.log('Creating PR review with body:', body);
     await this.octokit.pulls.createReview({
       owner,
       repo,
