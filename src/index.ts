@@ -26,7 +26,6 @@ app.get('/', (c) => {
 // GraphQL 端点
 app.all('/graphql', async (c) => {
   const env = c.env;
-  console.log('GraphQL request with env:', env);
   const yoga = createYoga({
     schema,
     graphqlEndpoint: '/graphql',
@@ -46,7 +45,6 @@ app.all('/graphql', async (c) => {
 app.post('/webhook/github', async (c) => {
 
   const env = c.env;
-  console.log('Received webhook with env:', env);
   try {
     const payload = await c.req.text();
     const signature = c.req.header('X-Hub-Signature-256') || '';
