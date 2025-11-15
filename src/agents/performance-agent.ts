@@ -18,7 +18,7 @@ export function createPerformanceAgent(openaiApiKey: string): Agent {
 7. Identify blocking operations`,
     model: {
       provider: 'OPEN_AI',
-      name: 'gpt-4-turbo-preview',
+      name: 'gpt-3.5-turbo',
       toolChoice: 'auto',
     },
   });
@@ -71,9 +71,9 @@ Return your analysis in JSON format:
         systemPrompt,
         fileContent,
       );
-      console.log(`performance Analysis result for ${file.filename}:`,result, typeof result);
+      console.log(`performance Analysis result for ${file.filename}:`);
       result = result.replace(/^```json\s*|\s*```$/gm, '');
-      console.log(`performance Cleaned Analysis result for ${file.filename}:`,result,typeof result);
+      // console.log(`performance Cleaned Analysis result for ${file.filename}:`,result,typeof result);
       const {issues:issuesResult} = JSON.parse(result);
       if (issuesResult && Array.isArray(issuesResult)) {
         for (const issue of issuesResult) {
@@ -88,6 +88,8 @@ Return your analysis in JSON format:
       }
     } catch (error) {
       console.error(`performance Error analyzing file ${file.filename}:`, error);
+      // 重新抛出错误以触发 step 重试
+      throw new Error(`Failed to analyze ${file.filename}: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
