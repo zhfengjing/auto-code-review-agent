@@ -17,7 +17,7 @@ export function createCodeStandardsAgent(openaiApiKey: string): Agent {
 6. Ensure adherence to language-specific best practices`,
     model: {
       provider: 'OPEN_AI',
-      name: 'gpt-4-turbo-preview',
+      name: 'gpt-3.5-turbo',
       toolChoice: 'auto',
     },
   });
@@ -84,6 +84,8 @@ Return your analysis in JSON format with this structure:
       }
     } catch (error) {
       console.error(`code Error analyzing file ${file.filename}:`, error);
+      // 重新抛出错误以触发 step 重试
+      throw new Error(`Failed to analyze ${file.filename}: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
   console.log('Total issues found:', issues.length);
