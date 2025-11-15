@@ -205,16 +205,16 @@ const aggregateStep = createStep({
       githubToken: z.string(),
       openaiApiKey: z.string(),
     }),
-    // 'performance-review': z.object({
-    //   result: z.any(),
-    //   owner: z.string(),
-    //   repo: z.string(),
-    //   pullNumber: z.number().optional(),
-    //   commitSha: z.string(),
-    //   branch: z.string(),
-    //   githubToken: z.string(),
-    //   openaiApiKey: z.string(),
-    // }),
+    'performance-review': z.object({
+      result: z.any(),
+      owner: z.string(),
+      repo: z.string(),
+      pullNumber: z.number().optional(),
+      commitSha: z.string(),
+      branch: z.string(),
+      githubToken: z.string(),
+      openaiApiKey: z.string(),
+    }),
   }),
     outputSchema: z.object({
       report: z.any(),
@@ -229,7 +229,7 @@ const aggregateStep = createStep({
     const codeStandardsStepRes = inputData['code-standards-review'];
     const codeStandardsResult = codeStandardsStepRes.result;
     const securityResult = inputData['security-review'].result;
-    // const performanceResult = inputData['performance-review'].result;
+    const performanceResult = inputData['performance-review'].result;
     const owner = codeStandardsStepRes.owner;
     const repo = codeStandardsStepRes.repo;
     const commitSha = codeStandardsStepRes.commitSha;
@@ -237,7 +237,7 @@ const aggregateStep = createStep({
     const pullNumber = codeStandardsStepRes.pullNumber;
     const githubToken = codeStandardsStepRes.githubToken;
 
-    const results = [codeStandardsResult, securityResult].filter(Boolean);
+    const results = [codeStandardsResult, securityResult,performanceResult].filter(Boolean);
     console.log('Individual results to aggregate:', results);
     // 计算总体得分
     const overallScore = Math.round(
@@ -364,7 +364,7 @@ export function createCodeReviewWorkflow() {
     // }
     // })
     // Step 2-4: 并行运行三个审核步骤
-    .parallel([codeStandardsStep, securityStep])
+    .parallel([codeStandardsStep, securityStep, performanceStep])
     // .parallel([codeStandardsStep, securityStep, performanceStep])
     // Step 5: 汇总结果 - 直接接收 parallel 步骤的输出
     .then(aggregateStep)
