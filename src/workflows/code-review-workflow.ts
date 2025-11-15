@@ -101,7 +101,7 @@ const codeStandardsStep = createStep({
     console.log('Executing code-standards-review step...',inputData.openaiApiKey);
     const { files, openaiApiKey } = inputData;
     const result = await reviewCodeStandards(files, openaiApiKey);
-    console.log('Code standards review result:', result);
+    console.log('Code standards review result:', Object.keys(result));
     return { result, ...inputData};
   },
 });
@@ -173,7 +173,7 @@ const performanceStep = createStep({
     console.log('Executing performance-review step...');
     const { files, openaiApiKey } = inputData;
     const result = await reviewPerformance(files, openaiApiKey);
-    console.log('Performance review result', Object.keys(result));
+    console.log('Performance review result', result);
     return { result, ...inputData };
   },
 });

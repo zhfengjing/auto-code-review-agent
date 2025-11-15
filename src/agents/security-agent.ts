@@ -85,7 +85,7 @@ Return your analysis in JSON format:
         }
       }
     } catch (error) {
-      console.error(`Error analyzing file ${file.filename}:`, error);
+      console.error(`security Error analyzing file ${file.filename}:`, error);
     }
   }
 

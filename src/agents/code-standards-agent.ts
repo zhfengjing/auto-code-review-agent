@@ -64,11 +64,12 @@ Return your analysis in JSON format with this structure:
     if (!fileContent) continue;
 
     try {
-      const result = await openaiTool.analyzeCode(
+      let result = await openaiTool.analyzeCode(
         systemPrompt,
         fileContent,
       );
-      console.log(`Analysis result for ${file.filename}:`, result, typeof result);
+      console.log(`code Analysis result for ${file.filename}:`);
+      result = result.replace(/^```json\s*|\s*```$/gm, '');
       const {issues:issuesResult} = JSON.parse(result);
       if (issuesResult && Array.isArray(issuesResult)) {
         for (const issue of issuesResult) {
@@ -82,7 +83,7 @@ Return your analysis in JSON format with this structure:
         }
       }
     } catch (error) {
-      console.error(`Error analyzing file ${file.filename}:`, error);
+      console.error(`code Error analyzing file ${file.filename}:`, error);
     }
   }
   console.log('Total issues found:', issues.length);

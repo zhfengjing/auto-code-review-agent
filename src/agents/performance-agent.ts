@@ -67,11 +67,12 @@ Return your analysis in JSON format:
     if (!fileContent) continue;
 
     try {
-      const result = await openaiTool.analyzeCode(
+      let result = await openaiTool.analyzeCode(
         systemPrompt,
         fileContent,
       );
       console.log(`performance Analysis result for ${file.filename}:`,result);
+      result = result.replace(/^```json\s*|\s*```$/gm, '');
       const {issues:issuesResult} = JSON.parse(result);
       if (issuesResult && Array.isArray(issuesResult)) {
         for (const issue of issuesResult) {
@@ -85,7 +86,7 @@ Return your analysis in JSON format:
         }
       }
     } catch (error) {
-      console.error(`Error analyzing file ${file.filename}:`, error);
+      console.error(`performance Error analyzing file ${file.filename}:`, error);
     }
   }
 

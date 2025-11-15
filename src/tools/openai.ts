@@ -30,12 +30,12 @@ export class OpenAITool {
     ];
 
     const completion = await this.client.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o-mini',
       messages,
       temperature: 0.3,
       max_tokens: 2000,
     });
-
+  
     return completion.choices[0]?.message?.content || '';
   }
 
@@ -59,7 +59,7 @@ export class OpenAITool {
     ];
     // console.log('analyzeCodeStructured this.client:', this.client.baseURL);
     const completion = await this.client.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o-mini',
       messages,
       temperature: 0.3,
       max_tokens: 2000,
