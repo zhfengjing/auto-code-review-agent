@@ -1,4 +1,4 @@
-import { Agent } from '@mastra/core';
+import { Agent } from '@mastra/core/agent';
 import { OpenAITool } from '../tools/openai.js';
 import { ReviewResult, Issue, FileChange } from '../types/index.js';
 
@@ -17,7 +17,7 @@ export function createCodeStandardsAgent(openaiApiKey: string): Agent {
 6. Ensure adherence to language-specific best practices`,
     model: {
       provider: 'OPEN_AI',
-      name: 'gpt-4.1',
+      name: 'gpt-4-turbo-preview',
       toolChoice: 'auto',
     },
   });
@@ -56,7 +56,7 @@ Return your analysis in JSON format with this structure:
   "summary": "overall summary",
   "score": number (0-100)
 }`;
-
+  console.log('Starting code standards review for files:');
   for (const file of files) {
     if (file.status === 'removed') continue;
 
@@ -64,14 +64,15 @@ Return your analysis in JSON format with this structure:
     if (!fileContent) continue;
 
     try {
-      const result = await openaiTool.analyzeCodeStructured(
+      let result = await openaiTool.analyzeCode(
         systemPrompt,
         fileContent,
-        {}
       );
-      console.log(`Analysis result for ${file.filename}:`);
-      if (result.issues && Array.isArray(result.issues)) {
-        for (const issue of result.issues) {
+      console.log(`code Analysis result for ${file.filename}:`);
+      result = result.replace(/^```json\s*|\s*```$/gm, '');
+      const {issues:issuesResult} = JSON.parse(result);
+      if (issuesResult && Array.isArray(issuesResult)) {
+        for (const issue of issuesResult) {
           issues.push({
             ...issue,
             file: file.filename,
@@ -82,10 +83,10 @@ Return your analysis in JSON format with this structure:
         }
       }
     } catch (error) {
-      console.error(`Error analyzing file ${file.filename}:`, error);
+      console.error(`code Error analyzing file ${file.filename}:`, error);
     }
   }
-
+  console.log('Total issues found:', issues.length);
   totalScore = Math.max(0, totalScore);
   const status: 'passed' | 'warning' | 'failed' =
     totalScore >= 80 ? 'passed' : totalScore >= 60 ? 'warning' : 'failed';

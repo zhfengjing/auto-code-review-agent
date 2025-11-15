@@ -18,7 +18,7 @@ export function createSecurityAgent(openaiApiKey: string): Agent {
 7. Verify secure data handling and storage`,
     model: {
       provider: 'OPEN_AI',
-      name: 'gpt-4.1',
+      name: 'gpt-4-turbo-preview',
       toolChoice: 'auto',
     },
   });
@@ -85,7 +85,7 @@ Return your analysis in JSON format:
         }
       }
     } catch (error) {
-      console.error(`Error analyzing file ${file.filename}:`, error);
+      console.error(`security Error analyzing file ${file.filename}:`, error);
     }
   }
 

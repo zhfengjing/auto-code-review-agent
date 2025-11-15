@@ -18,7 +18,7 @@ export function createPerformanceAgent(openaiApiKey: string): Agent {
 7. Identify blocking operations`,
     model: {
       provider: 'OPEN_AI',
-      name: 'gpt-4.1',
+      name: 'gpt-4-turbo-preview',
       toolChoice: 'auto',
     },
   });
@@ -67,14 +67,16 @@ Return your analysis in JSON format:
     if (!fileContent) continue;
 
     try {
-      const result = await openaiTool.analyzeCodeStructured(
+      let result = await openaiTool.analyzeCode(
         systemPrompt,
         fileContent,
-        {}
       );
-      console.log(`performance Analysis result for ${file.filename}:`);
-      if (result.issues && Array.isArray(result.issues)) {
-        for (const issue of result.issues) {
+      console.log(`performance Analysis result for ${file.filename}:`,result, typeof result);
+      result = result.replace(/^```json\s*|\s*```$/gm, '');
+      console.log(`performance Cleaned Analysis result for ${file.filename}:`,result,typeof result);
+      const {issues:issuesResult} = JSON.parse(result);
+      if (issuesResult && Array.isArray(issuesResult)) {
+        for (const issue of issuesResult) {
           issues.push({
             ...issue,
             file: file.filename,
@@ -85,7 +87,7 @@ Return your analysis in JSON format:
         }
       }
     } catch (error) {
-      console.error(`Error analyzing file ${file.filename}:`, error);
+      console.error(`performance Error analyzing file ${file.filename}:`, error);
     }
   }
 
