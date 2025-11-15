@@ -1,4 +1,4 @@
-import { Agent } from '@mastra/core';
+import { Agent } from '@mastra/core/agent';
 import { OpenAITool } from '../tools/openai.js';
 import { ReviewResult, Issue, FileChange } from '../types/index.js';
 
