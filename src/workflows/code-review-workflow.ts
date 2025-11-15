@@ -96,6 +96,7 @@ const codeStandardsStep = createStep({
     githubToken: z.string(),
     openaiApiKey: z.string(),
   }),
+  retries:3,
   execute: async ({ inputData }) => {
     console.log('Executing code-standards-review step...',inputData.openaiApiKey);
     const { files, openaiApiKey } = inputData;
@@ -131,6 +132,7 @@ const securityStep = createStep({
     githubToken: z.string(),
     openaiApiKey: z.string(),
   }),
+  retries:3,
   execute: async ({ inputData }) => {
     console.log('Executing security-review step...');
     const { files, openaiApiKey } = inputData;
@@ -166,6 +168,7 @@ const performanceStep = createStep({
     githubToken: z.string(),
     openaiApiKey: z.string(),
   }),
+  retries:3,
   execute: async ({ inputData }) => {
     console.log('Executing performance-review step...');
     const { files, openaiApiKey } = inputData;
@@ -184,7 +187,7 @@ const aggregateStep = createStep({
   inputSchema: z.object({
     codeStandardsResult: z.any(),
     securityResult: z.any(),
-    performanceResult: z.any(),
+    // performanceResult: z.any(),
     owner: z.string(),
     repo: z.string(),
     commitSha: z.string(),
@@ -206,7 +209,7 @@ const aggregateStep = createStep({
     const {
       codeStandardsResult,
       securityResult,
-      performanceResult,
+      // performanceResult,
       owner,
       repo,
       commitSha,
@@ -215,7 +218,8 @@ const aggregateStep = createStep({
        githubToken
     } = inputData;
 
-    const results = [codeStandardsResult, securityResult, performanceResult].filter(Boolean);
+    const results = [codeStandardsResult, securityResult].filter(Boolean);
+    // const results = [codeStandardsResult, securityResult, performanceResult].filter(Boolean);
     console.log('Individual results to aggregate:', results);
     // 计算总体得分
     const overallScore = Math.round(
@@ -342,8 +346,8 @@ export function createCodeReviewWorkflow() {
     // }
     // })
     // Step 2-4: 并行运行三个审核步骤
-    // .parallel([codeStandardsStep,securityStep])
-    .parallel([codeStandardsStep, securityStep, performanceStep])
+    .parallel([codeStandardsStep,securityStep])
+    // .parallel([codeStandardsStep, securityStep, performanceStep])
     // 使用 map 步骤将审核结果和原始输入合并
     .map(async(context) => {
       console.log('Collecting results from parallel steps...', context);
@@ -354,11 +358,11 @@ export function createCodeReviewWorkflow() {
       // console.log('Parallel results:', parallelResults);
       const securityResult = inputData['security-review'].result;
       const codeStandardsResult = inputData['code-standards-review'].result;
-      const performanceResult = inputData['performance-review'].result;
+      // const performanceResult = inputData['performance-review'].result;
       return {
         codeStandardsResult,
         securityResult,
-        performanceResult,
+        // performanceResult,
         // owner: securityResult.owner,
         // repo: securityResult.repo,
         // commitSha: securityResult.commitSha,
