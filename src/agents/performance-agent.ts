@@ -71,8 +71,8 @@ Return your analysis in JSON format:
         systemPrompt,
         fileContent,
       );
-      console.log(`performance Analysis result for ${file.filename}:`);
-     const {issues:issuesResult} = JSON.parse(result);
+      console.log(`performance Analysis result for ${file.filename}:`,result);
+      const {issues:issuesResult} = JSON.parse(result);
       if (issuesResult && Array.isArray(issuesResult)) {
         for (const issue of issuesResult) {
           issues.push({

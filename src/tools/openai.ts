@@ -74,14 +74,15 @@ export class OpenAITool {
   /**
    * 批量分析多个文件
    */
-  async analyzeMultipleFiles(
-    systemPrompt: string,
-    files: Array<{ filename: string; content: string }>
-  ): Promise<string> {
-    const filesContent = files
-      .map((file) => `File: ${file.filename}\n\`\`\`\n${file.content}\n\`\`\``)
-      .join('\n\n');
+//   async analyzeMultipleFiles(
+//     systemPrompt: string,
+//     files: Array<{ filename: string; content: string }>
+//   ): Promise<string> {
+//     const filesContent = files
+//       .map((file) => `File: ${file.filename}\n\`\`\`\n${file.content}\n\`\`\``)
+//       .join('\n\n');
 
-    return this.analyzeCode(systemPrompt, filesContent);
-  }
+//     return this.analyzeCode(systemPrompt, filesContent);
+  //   }
+  
 }
